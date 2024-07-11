@@ -1,0 +1,306 @@
+/* Modern Reset */
+/*
+  1. Use a more-intuitive box-sizing model.
+*/
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+*,
+*:focus,
+*:hover {
+  outline: none;
+}
+/*
+    2. Remove default margin
+  */
+* {
+  margin: 0;
+}
+/*
+    Typographic tweaks!
+    3. Add accessible line-height
+    4. Improve text rendering
+  */
+body {
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+/*
+    5. Improve media defaults
+  */
+img,
+picture,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+}
+/*
+    6. Remove built-in form typography styles
+  */
+input,
+button,
+textarea,
+select {
+  font: inherit;
+}
+/*
+    7. Avoid text overflows
+  */
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  overflow-wrap: break-word;
+}
+/*
+    8. Create a root stacking context
+  */
+#root,
+#__next {
+  isolation: isolate;
+}
+
+/* Utopia Fluid scales  */
+/* @link https://utopia.fyi/type/calculator?c=320,16,1.2,1240,20,1.25,5,2,&s=0.75|0.5|0.25,1.5|2|3|4|6,s-l&g=s,l,xl,12 */
+
+:root {
+  --step--2: clamp(0.6944rem, 0.6577rem + 0.1836vi, 0.8rem);
+  --step--1: clamp(0.8333rem, 0.7754rem + 0.2899vi, 1rem);
+  --step-0: clamp(1rem, 0.913rem + 0.4348vi, 1.25rem);
+  --step-1: clamp(1.2rem, 1.0739rem + 0.6304vi, 1.5625rem);
+  --step-2: clamp(1.44rem, 1.2615rem + 0.8924vi, 1.9531rem);
+  --step-3: clamp(1.728rem, 1.4799rem + 1.2407vi, 2.4414rem);
+  --step-4: clamp(2.0736rem, 1.7334rem + 1.7011vi, 3.0518rem);
+  --step-5: clamp(2.4883rem, 2.027rem + 2.3067vi, 3.8147rem);
+
+  /* @link https://utopia.fyi/space/calculator?c=320,16,1.2,1240,20,1.25,5,2,&s=0.75|0.5|0.25,1.5|2|3|4|6,s-l&g=s,l,xl,12 */
+
+  --space-3xs: clamp(0.25rem, 0.2283rem + 0.1087vi, 0.3125rem);
+  --space-2xs: clamp(0.5rem, 0.4565rem + 0.2174vi, 0.625rem);
+  --space-xs: clamp(0.75rem, 0.6848rem + 0.3261vi, 0.9375rem);
+  --space-s: clamp(1rem, 0.913rem + 0.4348vi, 1.25rem);
+  --space-m: clamp(1.5rem, 1.3696rem + 0.6522vi, 1.875rem);
+  --space-l: clamp(2rem, 1.8261rem + 0.8696vi, 2.5rem);
+  --space-xl: clamp(3rem, 2.7391rem + 1.3043vi, 3.75rem);
+  --space-2xl: clamp(4rem, 3.6522rem + 1.7391vi, 5rem);
+  --space-3xl: clamp(6rem, 5.4783rem + 2.6087vi, 7.5rem);
+
+  /* One-up pairs */
+  --space-3xs-2xs: clamp(0.25rem, 0.1196rem + 0.6522vi, 0.625rem);
+  --space-2xs-xs: clamp(0.5rem, 0.3478rem + 0.7609vi, 0.9375rem);
+  --space-xs-s: clamp(0.75rem, 0.5761rem + 0.8696vi, 1.25rem);
+  --space-s-m: clamp(1rem, 0.6957rem + 1.5217vi, 1.875rem);
+  --space-m-l: clamp(1.5rem, 1.1522rem + 1.7391vi, 2.5rem);
+  --space-l-xl: clamp(2rem, 1.3913rem + 3.0435vi, 3.75rem);
+  --space-xl-2xl: clamp(3rem, 2.3043rem + 3.4783vi, 5rem);
+  --space-2xl-3xl: clamp(4rem, 2.7826rem + 6.087vi, 7.5rem);
+
+  /* Custom pairs */
+  --space-s-l: clamp(1rem, 0.4783rem + 2.6087vi, 2.5rem);
+
+  --legal: #fff;
+  --white: #fff;
+  --black: #0d0d0d;
+  --contrast: #1f2937;
+  --brand_panel: rgba(0, 0, 0, 0.4);
+  --gridline: rgba(255, 255, 255, .20);
+
+  --panel_form: rgba(255, 255, 255, 1);
+  --panel_login: #f3f3f3;
+  --panelshadow: 1px 1px 10px -1px rgba(0, 0, 0, 0.2);
+  --outline: #e5e7eb;
+  --copy: #444444;
+  --quiet: #a2a2a2;
+  --grey: #e2e8f0;
+  --primary: #1992d4;
+  --primary-light: rgb(0, 200, 255);
+  --accent: #f0b429;
+  --secondary: #f0b429;
+  --basis: calc((100% - 1rem) / 2);
+  --error: #e40000;
+  --focus: rgb(0, 170, 255);
+}
+
+html,
+body {
+  height: 100%;
+  color: var(--copy);
+}
+
+body {
+  font-family: "Lilita One", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  color: var(--white);
+  background-color: var(--body);
+  padding: var(--space-l);
+  position: relative;
+  font-size: var(--step-0);
+  background: var(--contrast);
+  background-image: linear-gradient(
+    10deg,
+    hsl(215deg 28% 17%) 0%,
+    hsl(216deg 37% 23%) 33%,
+    hsl(218deg 45% 29%) 67%,
+    hsl(218deg 53% 35%) 100%
+  );
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: var(--white);
+}
+
+h2 {
+  font-size: var(--step-5);
+  font-weight: 400;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-l)
+}
+
+.prompt {
+  text-align: center;
+}
+
+#board {
+  display: grid;
+  grid-template-columns: repeat(3, var(--space-3xl));
+  grid-template-rows: repeat(3, var(--space-3xl));
+  margin: 0 auto;
+}
+
+.cell {
+  background:transparent;
+  border: 1px dotted var(--gridline);
+  color: var(--black);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 800;
+    font-size: var(--step-5);
+}
+.cell > img {
+  width: 100%;
+  height: 100%;
+  object-fit: scale-down;
+}
+
+.cell:nth-child(3n + 1) {
+  border-left: none;
+}
+
+.cell:nth-child(3n + 3) {
+  border-right: none;
+}
+
+.cell:nth-child(-n + 3){
+  border-top: none;
+}
+
+.cell:nth-last-child(-n + 3){
+  border-bottom: none;
+}
+
+
+
+.cell:hover {
+  cursor: pointer;
+  background: var(--accent);
+
+}
+
+
+.btn {
+    font-size: 14px;
+    font-weight: 500;
+    border-radius: 3px;
+    border: none;
+    padding: var(--space-3xs) var(--space-s);
+  }
+  
+  .btn:hover {
+    cursor: pointer;
+  }
+  
+  .btn--primary {
+    background: var(--primary);
+    color: var(--white);
+  }
+  
+  .btn--primary:hover {
+    background: var(--primary-light);
+  }
+
+  .btn--readtoggle {
+    padding: 0;
+    background: transparent;
+  }
+  
+
+  .modal {
+    background: rgba(0, 0, 0, 0.2);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    height: 100vh;
+    width: 100vw;
+    inset: 0;
+  }
+
+  .wrap {
+    max-width: 300px;
+    background: var(--white);
+    padding: var(--space-m);
+    border-radius: 3px;
+  }
+
+  .hidden {
+    display: none;
+  }
+
+
+.field {
+    margin-bottom: var(--space-xs)
+}
+
+label {
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 0.75rem;
+    padding-bottom: 3px;
+  }
+  
+  label .required {
+    font-size: 0.5rem;
+    color: var(--quiet);
+  }
+  
+  .input {
+    border: 1px solid var(--outline);
+    border-radius: 3px;
+    padding: 3px;
+    width: 100%;
+  }
+  
+  .input:focus {
+    border: 1px solid  var(--focus);
+    box-shadow:  0px 3px 3px -1px rgba(0, 0, 0, 0.12);
+  }
+  
+  
+  .input:invalid {
+    border: 1px solid red;
+  }
+  
