@@ -13,11 +13,12 @@ function Gameboard() {
     }
     const getBoard = () => board;
 
-    const pickCell = (row, column, player) => {
+    const placeToken = (row, column, player) => {
         if (board[row][column].getValue() !== 0) {
            return console.log('cell already taken');
         }
-        return board[row][column].addToken(player);
+        
+        board[row][column].addToken(player);
     }
 
     const printBoard = () => {
@@ -30,7 +31,7 @@ function Gameboard() {
         console.table(boardWithCellValues);
       };
 
-    return { getBoard, pickCell, printBoard }
+    return { getBoard, placeToken, printBoard }
 
 }
 
@@ -50,7 +51,7 @@ function Cell() {
 }
 
 
-function GameController(playerOneName = 'p1', playerTwoName = 'p2') {
+function GameController(playerOneName = 'Player 1', playerTwoName = 'Player 2') {
 
     const board = Gameboard();
 
@@ -71,6 +72,16 @@ function GameController(playerOneName = 'p1', playerTwoName = 'p2') {
 
     const getActivePlayer = () => {
         return activePlayer;
+    }
+
+    const updatePrompt = (message) => {
+        const promptDiv = document.querySelector('.prompt');
+        promptDiv.textContent = message;
+    }
+
+    const printNewTurn = () => {
+        board.printBoard();
+        console.log(`${getActivePlayer().name}'s turn.`);
     }
 
     const checkWinner = () => {
@@ -135,14 +146,13 @@ function GameController(playerOneName = 'p1', playerTwoName = 'p2') {
         return 0; // No winner yet, but the game is still ongoing
     }
 
-    const printNewTurn = () => {
-        board.printBoard();
-        console.log(`${getActivePlayer().name}'s turn.`);
-    }
+
 
     const playTurn = (row,column) => {
 
-        board.pickCell(row, column, getActivePlayer().token);
+
+
+        board.placeToken(row, column, getActivePlayer().token);
 
         // Check for win
 
@@ -150,24 +160,22 @@ function GameController(playerOneName = 'p1', playerTwoName = 'p2') {
 
         if (winState === 0) {
             switchActivePlayer();
+            updatePrompt(`${activePlayer.name}'s turn`);
         } else if (winState === null) {
-            console.log(`no winner`);
+            updatePrompt(`Uh-oh, it's a draw!`);
         } else {
             const winner = players.find((player) => player.token === winState )
-            console.log(`winner = ${winner.name}`);
+            updatePrompt(`${winner.name} is the winner!`);
         }
 
     }
 
-    // Set initial board:
-
-    return {playTurn, getActivePlayer, getBoard: board.getBoard, printNewTurn}
+    return {playTurn, getActivePlayer, getBoard: board.getBoard, printNewTurn, updatePrompt}
 };
 
 function ScreenControler() {
     const game = GameController();
     const boardDiv = document.querySelector('#board');
-    const promptDiv = document.querySelector('.prompt');
 
     function clickHandleBoard(e) {
         const row = e.target.dataset.row;
@@ -185,12 +193,11 @@ function ScreenControler() {
     const updateScreen = () => {
         boardDiv.textContent = ""; // clear the board
         const board = game.getBoard();
-        const activePlayer = game.getActivePlayer();
 
         const xSrc = './images/x.png';
         const oSrc = './images/o.png';
 
-        promptDiv.textContent = `${activePlayer.name}'s turn`
+
         // rows 
         for (let i = 0; i < board.length; i++) {
             // columns
@@ -225,24 +232,7 @@ function ScreenControler() {
 
     // Initial render 
     updateScreen();
+    game.updatePrompt(`Ready, ${game.getActivePlayer().name}?`);
 }
 
-ScreenControler()
-
-// win
-// game.playTurn(0,0);
-// game.playTurn(0,1);
-// game.playTurn(1,0);
-// game.playTurn(1,1);
-// game.playTurn(2,0);
-
-// draw
-// game.playTurn(0,0);
-// game.playTurn(0,1);
-// game.playTurn(0,2);
-// game.playTurn(1,1);
-// game.playTurn(1,0);
-// game.playTurn(1,2);
-// game.playTurn(2,1);
-// game.playTurn(2,0);
-// game.playTurn(2,2);
+ScreenControler();

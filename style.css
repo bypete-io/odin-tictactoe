@@ -136,7 +136,7 @@ body {
 }
 
 body {
-  font-family: "Lilita One", sans-serif;
+  font-family: "Poppins", sans-serif;
   font-weight: 400;
   font-style: normal;
   color: var(--white);
@@ -158,26 +158,30 @@ h1, h2, h3, h4, h5, h6 {
   color: var(--white);
 }
 
-h2 {
-  font-size: var(--step-5);
-  font-weight: 400;
-}
-
 .container {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-l)
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  gap: var(--space-3xl)
+}
+.info {
+  justify-self: start;
 }
 
 .prompt {
   text-align: center;
+  font-size: var(--step-4);
+  font-weight: 800;
+  letter-spacing: -1px;
 }
 
 #board {
+  justify-self: end;
   display: grid;
   grid-template-columns: repeat(3, var(--space-3xl));
   grid-template-rows: repeat(3, var(--space-3xl));
-  margin: 0 auto;
 }
 
 .cell {
