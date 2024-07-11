@@ -1,15 +1,19 @@
 function Gameboard() {
     const rows = 3;
     const columns = 3;
-    const board = [];
+    let board = [];
 
-    // Create board matrix 
-    for (let i = 0; i < rows; i += 1) {
-        board[i] = [];
-        for (let j = 0; j < columns; j += 1) {
-            board[i].push(Cell());
+    const newBoard = () => {
+        board = [];
+        // Create board matrix 
+        for (let i = 0; i < rows; i += 1) {
+            board[i] = [];
+            for (let j = 0; j < columns; j += 1) {
+                board[i].push(Cell());
+            }
         }
     }
+
     const getBoard = () => board;
 
     const placeToken = (row, column, player) => {
@@ -30,7 +34,7 @@ function Gameboard() {
         console.table(boardWithCellValues);
     };
 
-    return { getBoard, placeToken, printBoard }
+    return { getBoard, placeToken, newBoard, printBoard }
 
 }
 
@@ -53,6 +57,7 @@ function Cell() {
 function GameController(playerOneName = 'Player 1', playerTwoName = 'Player 2') {
 
     const board = Gameboard();
+    board.newBoard();
 
     const players = [{
         name: playerOneName,
@@ -65,6 +70,7 @@ function GameController(playerOneName = 'Player 1', playerTwoName = 'Player 2') 
 
     let activePlayer = players[0]; // player 1 goes first
     let activeGame = true;
+    const resetBtn = document.querySelector('#reset');
 
     const switchActivePlayer = () => {
         activePlayer = activePlayer === players[0] ? players[1] : players[0];
@@ -85,6 +91,19 @@ function GameController(playerOneName = 'Player 1', playerTwoName = 'Player 2') 
     const updatePrompt = (message) => {
         const promptDiv = document.querySelector('.prompt');
         promptDiv.textContent = message;
+    }
+
+    const showResetButton = (state) => {
+        resetBtn.classList.toggle('hidden', !state);
+        resetBtn.disabled = !state;
+    }
+
+    const resetGame = () => {
+        console.log('reset');
+        board.newBoard();
+        sc.updateScreen();
+        setActiveGame(true);
+        showResetButton(false);
     }
 
     const printNewTurn = () => {
@@ -129,18 +148,20 @@ function GameController(playerOneName = 'Player 1', playerTwoName = 'Player 2') 
                 diagonalTLBR = false;
                 break;
             }
-            if (diagonalTLBR && status[0][0] !== 0) {
-                return status[0][0];
-            }
         }
-        let diagonalBLTR = true;
+
+        if (diagonalTLBR && status[0][0] !== 0) {
+            return status[0][0];
+        }
+
+        let diagonalTRBL = true;
         for (let i = 1; i < size; i++) {
             if (status[i][size - i - 1] !== status[0][size - 1]) {
-                diagonalBLTR = false;
+                diagonalTRBL = false;
                 break;
             }
         }
-        if (diagonalBLTR && status[0][size - 1] !== 0) {
+        if (diagonalTRBL && status[0][size - 1] !== 0) {
             return status[0][size - 1];
         }
         // Potential draw
@@ -172,18 +193,22 @@ function GameController(playerOneName = 'Player 1', playerTwoName = 'Player 2') 
             updatePrompt(`${activePlayer.name}'s turn`);
         } else if (winState === null) {
             setActiveGame(false);
-
-            updatePrompt(`Uh-oh, it's a draw!`);
+            showResetButton(true);
+            updatePrompt(`Ugh, it's a draw!`);
 
         } else {
             setActiveGame(false);
+            showResetButton(true);
             const winner = players.find((player) => player.token === winState)
             updatePrompt(`${winner.name} wins!`);
+            
         }
 
     }
 
-    return { playTurn, getActivePlayer, getActiveGame, getBoard: board.getBoard, printNewTurn, updatePrompt }
+    resetBtn.addEventListener('click', resetGame);
+
+    return { playTurn, getActivePlayer, getActiveGame, getBoard: board.getBoard, printNewTurn, updatePrompt, resetGame }
 };
 
 function ScreenControler() {
@@ -246,6 +271,7 @@ function ScreenControler() {
     // Initial render 
     updateScreen();
     game.updatePrompt(`Ready, ${game.getActivePlayer().name}?`);
+    return { updateScreen }
 }
 
-ScreenControler();
+const sc = ScreenControler();
