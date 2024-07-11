@@ -1,4 +1,3 @@
-
 function Gameboard() {
     const rows = 3;
     const columns = 3;
@@ -15,9 +14,9 @@ function Gameboard() {
 
     const placeToken = (row, column, player) => {
         if (board[row][column].getValue() !== 0) {
-           return console.log('cell already taken');
+            return console.log('cell already taken');
         }
-        
+
         board[row][column].addToken(player);
     }
 
@@ -27,9 +26,9 @@ function Gameboard() {
                 return cell.getValue();
             });
         });
-        
+
         console.table(boardWithCellValues);
-      };
+    };
 
     return { getBoard, placeToken, printBoard }
 
@@ -55,7 +54,7 @@ function GameController(playerOneName = 'Player 1', playerTwoName = 'Player 2') 
 
     const board = Gameboard();
 
-    const players = [ {
+    const players = [{
         name: playerOneName,
         token: 1,
     },
@@ -63,8 +62,9 @@ function GameController(playerOneName = 'Player 1', playerTwoName = 'Player 2') 
         name: playerTwoName,
         token: 2,
     }]
-    
+
     let activePlayer = players[0]; // player 1 goes first
+    let activeGame = true;
 
     const switchActivePlayer = () => {
         activePlayer = activePlayer === players[0] ? players[1] : players[0];
@@ -72,6 +72,14 @@ function GameController(playerOneName = 'Player 1', playerTwoName = 'Player 2') 
 
     const getActivePlayer = () => {
         return activePlayer;
+    }
+
+    const setActiveGame = (activeState = true) => {
+        activeGame = activeState;
+    }
+
+    const getActiveGame = () => {
+        return activeGame;
     }
 
     const updatePrompt = (message) => {
@@ -95,45 +103,45 @@ function GameController(playerOneName = 'Player 1', playerTwoName = 'Player 2') 
 
         // Check rows 
         for (let i = 0; i < size; i++) {
-            
 
-            if (status[i][0] !== 0 && status[i].every((cell) => cell === status[i][0])){
+
+            if (status[i][0] !== 0 && status[i].every((cell) => cell === status[i][0])) {
                 return status[i][0]; // winner value
             }
 
             // check columns 
             let columnWin = true;
             for (let j = 1; j < size; j++) {
-                if (status[j][i] !== status[0][i]){
-                    columnWin = false; 
+                if (status[j][i] !== status[0][i]) {
+                    columnWin = false;
                     break;
                 }
             }
-            if (columnWin && status[0][i] !== 0 ){
+            if (columnWin && status[0][i] !== 0) {
                 return status[0][i];
             }
         }
 
         // check diagonal top left to bottom right
         let diagonalTLBR = true;
-        for(let i = 1; i < size; i++){
-            if( status[i][i] !== status[0][0]){
+        for (let i = 1; i < size; i++) {
+            if (status[i][i] !== status[0][0]) {
                 diagonalTLBR = false;
                 break;
             }
-            if(diagonalTLBR && status[0][0] !== 0) {
+            if (diagonalTLBR && status[0][0] !== 0) {
                 return status[0][0];
             }
         }
         let diagonalBLTR = true;
-        for(let i = 1; i < size; i++){
-            if(status[i][size - i -1] !== status[0][size - 1]){
+        for (let i = 1; i < size; i++) {
+            if (status[i][size - i - 1] !== status[0][size - 1]) {
                 diagonalBLTR = false;
                 break;
             }
         }
-        if (diagonalBLTR && status[0][size - 1]!==0){
-            return status[0][size -1];
+        if (diagonalBLTR && status[0][size - 1] !== 0) {
+            return status[0][size - 1];
         }
         // Potential draw
 
@@ -142,35 +150,40 @@ function GameController(playerOneName = 'Player 1', playerTwoName = 'Player 2') 
             return null; // No winner and no unused cells
         }
 
-    // No win
+        // No win
         return 0; // No winner yet, but the game is still ongoing
     }
 
 
 
-    const playTurn = (row,column) => {
+    const playTurn = (row, column) => {
 
-
+        if (!getActiveGame()) {
+            return;
+        }
 
         board.placeToken(row, column, getActivePlayer().token);
 
         // Check for win
-
         const winState = checkWinner();
 
         if (winState === 0) {
             switchActivePlayer();
             updatePrompt(`${activePlayer.name}'s turn`);
         } else if (winState === null) {
+            setActiveGame(false);
+
             updatePrompt(`Uh-oh, it's a draw!`);
+
         } else {
-            const winner = players.find((player) => player.token === winState )
-            updatePrompt(`${winner.name} is the winner!`);
+            setActiveGame(false);
+            const winner = players.find((player) => player.token === winState)
+            updatePrompt(`${winner.name} wins!`);
         }
 
     }
 
-    return {playTurn, getActivePlayer, getBoard: board.getBoard, printNewTurn, updatePrompt}
+    return { playTurn, getActivePlayer, getActiveGame, getBoard: board.getBoard, printNewTurn, updatePrompt }
 };
 
 function ScreenControler() {
@@ -211,7 +224,7 @@ function ScreenControler() {
                 cellButton.dataset.column = j;
 
                 const label = board[i][j].getValue();
-                if (label === 1){
+                if (label === 1) {
                     img.src = xSrc;
                     img.alt = 'x';
                     cellButton.appendChild(img);
