@@ -11,12 +11,31 @@
 </head>
 <body>
     <main class="container">
+        <div class="actions"><button type="button" class="btn btn--clear btn--round" id="settings">⚙️</button> </div>
         <div id="board"></div>
         <div class="info">
             <span class="prompt"></span>
             <button id="reset" class="btn btn--primary hidden" disabled>Play again</button>
         </div>
     </main>
+    <div id="settingsModal" class="modal hidden ">
+        <div class="wrap">
+            <form action="">
+                <div class="fieldsets">
+                    <div class="field">
+                      <label for="title">Player 1</label>
+                      <input class="input" type="text" id="playerone" name="playerone" pattern="[a-zA-Z0-9]+" >
+                    </div>
+                    <div class="field">
+                      <label for="author">Player 2</label>
+                      <input class="input" type="text" id="playertwo" name="playertwo" pattern="[a-zA-Z0-9]+" >
+                    </div>
+                  </div>
+                  <div id="settingsHelp" class="help"></div>
+                <button id="submitSettings" type="submit" class="btn btn--primary">Let's Go!</button>
+            </form>
+        </div>
+    </div>
     <script src="app.js"></script>
 </body>
 </html>

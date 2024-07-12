@@ -69,8 +69,11 @@ function GameController(playerOneName = 'Player 1', playerTwoName = 'Player 2') 
     }]
 
     let activePlayer = players[0]; // player 1 goes first
-    let activeGame = true;
+    let activeGame = false;
     const resetBtn = document.querySelector('#reset');
+    const settingsModal = document.querySelector('#settingsModal');
+    const settingsBtn = document.querySelector('#settings');
+    const submitSettings = document.querySelector('#submitSettings');
 
     const switchActivePlayer = () => {
         activePlayer = activePlayer === players[0] ? players[1] : players[0];
@@ -88,9 +91,33 @@ function GameController(playerOneName = 'Player 1', playerTwoName = 'Player 2') 
         return activeGame;
     }
 
+    const getByName = (name) => {
+        return document.querySelector(`input[name="${name}"`);
+    }
+
     const updatePrompt = (message) => {
         const promptDiv = document.querySelector('.prompt');
         promptDiv.textContent = message;
+    }
+
+    const toggleSettingsModal = (state=true) => {
+        settingsModal.classList.toggle('hidden', !state);
+    }
+
+    const updateSettings = (e) => {
+        e.preventDefault();
+        const helpPrompt = document.querySelector('#settingsHelp');
+        let p1 = getByName('playerone').value;
+        let p2 = getByName('playertwo').value;
+        if (p1 === "" || p2 === "") {
+            return helpPrompt.textContent = `ℹ️ Please add both names to begin`;
+        }
+        [players[0].name, players[1].name] = [p1, p2];
+        toggleSettingsModal(false);
+
+        sc.updateScreen();
+        setActiveGame(true);
+        updatePrompt(`Ready, ${getActivePlayer().name}?`);
     }
 
     const showResetButton = (state) => {
@@ -102,6 +129,8 @@ function GameController(playerOneName = 'Player 1', playerTwoName = 'Player 2') 
         console.log('reset');
         board.newBoard();
         sc.updateScreen();
+        switchActivePlayer();
+        updatePrompt(`Ready, ${getActivePlayer().name}?`);
         setActiveGame(true);
         showResetButton(false);
     }
@@ -205,10 +234,19 @@ function GameController(playerOneName = 'Player 1', playerTwoName = 'Player 2') 
         }
 
     }
-
+    // Listeners 
     resetBtn.addEventListener('click', resetGame);
+    settingsBtn.addEventListener('click', () => toggleSettingsModal(true));
+    settingsModal.addEventListener('click', function(event){
+        const outside = !event.target.closest('.wrap');
+        if (outside && getActiveGame()) {
+            toggleSettingsModal(false)
+        }
+    
+    });
+    submitSettings.addEventListener('click', updateSettings);
 
-    return { playTurn, getActivePlayer, getActiveGame, getBoard: board.getBoard, printNewTurn, updatePrompt, resetGame }
+    return { playTurn, getActivePlayer, getActiveGame, getBoard: board.getBoard, printNewTurn, updatePrompt, resetGame, toggleSettingsModal }
 };
 
 function ScreenControler() {
@@ -269,8 +307,9 @@ function ScreenControler() {
     boardDiv.addEventListener('click', clickHandleBoard)
 
     // Initial render 
-    updateScreen();
-    game.updatePrompt(`Ready, ${game.getActivePlayer().name}?`);
+    game.toggleSettingsModal(true);
+    
+
     return { updateScreen }
 }
 

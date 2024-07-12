@@ -113,6 +113,7 @@ h6 {
   --brand_panel: rgba(0, 0, 0, 0.4);
   --gridline: rgba(255, 255, 255, .20);
 
+  --panel: #25354b;
   --panel_form: rgba(255, 255, 255, 1);
   --panel_login: #f3f3f3;
   --panelshadow: 1px 1px 10px -1px rgba(0, 0, 0, 0.2);
@@ -159,6 +160,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .container {
+  position: relative;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   justify-content: center;
@@ -166,6 +168,14 @@ h1, h2, h3, h4, h5, h6 {
   height: 100%;
   gap: var(--space-3xl)
 }
+
+.actions {
+  position:fixed;
+  top: var(--space-s);
+  right: var(--space-s);
+
+}
+
 .info {
   justify-self: start;
 }
@@ -253,9 +263,21 @@ h1, h2, h3, h4, h5, h6 {
     background: transparent;
   }
   
+  .btn--clear {
+    background: transparent;
+    border: 1px solid transparent;
+  }
+  .btn--clear:hover {
+    background: transparent;
+    border: 1px solid var(--white)
+  }
+  .btn--round {
+    padding: var(--space-2xs);
+    border-radius: 100%;
+  }
 
   .modal {
-    background: rgba(0, 0, 0, 0.2);
+    background: rgba(0, 0, 0, 0.5);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -267,7 +289,8 @@ h1, h2, h3, h4, h5, h6 {
 
   .wrap {
     max-width: 300px;
-    background: var(--white);
+    box-shadow: var(--panelshadow);
+    background: var(--panel);
     padding: var(--space-m);
     border-radius: 3px;
   }
@@ -310,3 +333,8 @@ label {
     border: 1px solid red;
   }
   
+  .help {
+    font-size: var(--step--2);
+    margin-top: var(--space-2xs);
+    margin-bottom: var(--space-2xs);
+  }
